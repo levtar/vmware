@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  vmware_exporter:
+    image: levtar/vmware_exporter
+    container_name: vmware_exporter
+    expose:
+      - 5000
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/application

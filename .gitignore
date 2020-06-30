@@ -1,0 +1,9 @@
+/Scripts/
+/venv/
+/Lib/
+/Include/
+/pyvenv.cfg
+access.json
+/terraform/.terraform/
+/terraform/terraform.tfstate
+/terraform/terraform.tfstate.backup
