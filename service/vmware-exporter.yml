@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vmware-exporter
+spec:
+  selector:
+    matchLabels:
+      run: vmware-exporter
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: vmware-exporter
+    spec:
+      containers:
+        - name: vmware-exporter
+          image: gcr.io/vmware-281905/vmware_exporter:1.0.0
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vmware-exporter
+  labels:
+    run: vmware-exporter
+spec:
+  ports:
+    - port: 5000
+      protocol: TCP
+  selector:
+    run: vmware-exporter

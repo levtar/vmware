@@ -91,7 +91,16 @@ docker push gcr.io/${PROJECT_ID}/vmware_exporter:${BUILD_VERSION}
 ```
 
 ## Install vmware_exporter application at the k8s environment
-For sake of demonstration production release is using GCP load-balancer.
+
+The exporter is intended for by Prometheus, which supposed to be part of the same k8s cluster, and thus doesn't need 
+external route. For this reason I would expose the exporter service as ClusterIP.
+`kubectl` manifest for deployment of vmware_exporter as a service with CLusterIP could be found at
+[vmware-exporter.yml](service\vmware-exporter.yml).
+For deploying the vmware_exporter as a service with ClusterIP run `kubectl apply -f service\vmware-exporter.yml`.
+
+For sake of demonstration I've decided to expose the vmware_exporter using GCP LoadBalancer.
+Helm chart has been created using `helm create` command and may include some redundant code.
+
 To install helm release, run the following from within 'helm' directory:
 - `helm -n production install vmware . -f values.yaml`.  
 **Note:** Helm's application access URL notes should be disregarded. Instead of this use bellow instructions.  
@@ -99,11 +108,10 @@ Access the vmware_exporter application by running bellow commands.
 - `export LOADBALANCER_IP=$(kubectl get --namespace production -o jsonpath="{.status.loadBalancer.ingress[0].ip}" services vmware)`
 - `curl $LOADBALANCER_IP/metrics`
 
-Prometheus is the only service that is going to scrap the vmware_exporter.
-I don't see reason for defining the ingress controller.
-
 - `helm -n production uninstall vmware` to uninstall the chart
 
-## Additional resources
-vmware_exporter is running at [http://34.68.234.150/metrics](http://34.68.234.150/metrics).
-The service will be available due 07/07/2020
+### Additional resources
+For demonstration purpose I've left the vmware_exporter is running at 
+[http://34.68.234.150/metrics](http://34.68.234.150/metrics). 
+
+The service will be available due 07/07/2020.
